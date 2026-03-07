@@ -1,0 +1,10 @@
+# IDEs
+.idea
+.vscode
+
+# Docker Secrets
+homelab/**/secrets
+
+# Config
+**/*.env
+!**/*.dist.env

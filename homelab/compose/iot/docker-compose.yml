@@ -1,0 +1,71 @@
+services:
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: always
+    privileged: true
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - "traefik.enable=true"
+    environment:
+      - "TZ=Europe/Stockholm"
+    volumes:
+      - homeassistant-data:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+
+  matter:
+    image: ghcr.io/matter-js/python-matter-server:stable
+    container_name: matter
+    restart: always
+    network_mode: host
+    security_opt:
+      - apparmor=unconfined
+    volumes:
+      - matter-data:/data
+      - /run/dbus:/run/dbus:ro
+    command: --storage-path /data --paa-root-cert-dir /data/credentials --log-level debug --listen-address 0.0.0.0 --bluetooth-adapter 0
+
+  openthread:
+    image: openthread/border-router:latest
+    container_name: openthread
+    restart: always
+    privileged: true
+    network_mode: host
+    env_file:
+      - ./.env.thread
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - openthread-data:/data
+      - /run/dbus:/run/dbus:ro
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/net/tun:/dev/net/tun
+
+#  sonoff-dongle-flasher:
+#    image: ewelink/sonoff-dongle-flasher:latest
+#    container_name: sonoff-dongle-flasher
+#    restart: unless-stopped
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.sonoff.entrypoints=web"
+#      - "traefik.http.routers.sonoff.rule=Host(`dongle.home.arpa`)"
+#      - "traefik.http.services.sonoff.loadbalancer.server.port=8324"
+#    privileged: true
+#    networks:
+#      - services
+#    volumes:
+#      - sonoff-data:/workspace/data
+#      - /run/udev:/run/udev:ro
+#    devices:
+#      - /dev/ttyUSB0:/dev/ttyUSB0
+
+volumes:
+  homeassistant-data:
+  matter-data:
+  openthread-data:
+  sonoff-data:

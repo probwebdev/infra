@@ -1,0 +1,28 @@
+services:
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.entrypoints=web"
+      - "traefik.http.routers.transmission.rule=Host(`downloads.home.arpa`)"
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+    environment:
+      - "PUID=1000"
+      - "PGID=1000"
+      - "TZ=Europe/Stockholm"
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+    networks:
+      - services
+    volumes:
+      - transmission-config:/config
+
+networks:
+  services:
+    external: true
+
+volumes:
+  transmission-config:

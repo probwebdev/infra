@@ -1,0 +1,13 @@
+http:
+  routers:
+    homeassistant:
+      rule: "Host(`hub.home.arpa`)"
+      entryPoints:
+        - web
+      service: homeassistant
+
+  services:
+    homeassistant:
+      loadBalancer:
+        servers:
+          - url: "http://homelab.home.arpa:8123"

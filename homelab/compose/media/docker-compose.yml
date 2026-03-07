@@ -1,0 +1,42 @@
+services:
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    group_add:
+      - '105'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.entrypoints=web"
+      - "traefik.http.routers.jellyfin.rule=Host(`media.home.arpa`)"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    networks:
+      - services
+    volumes:
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
+      - type: bind
+        source: ~/Videos
+        target: /media
+      - type: bind
+        source: ~/Music
+        target: /media2
+        read_only: true
+      # Optional - extra fonts to be used during transcoding with subtitle burn-in
+      - type: bind
+        source: /usr/local/share/fonts
+        target: /usr/local/share/fonts/custom
+        read_only: true
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+
+networks:
+  services:
+    external: true
+
+volumes:
+  jellyfin-config:
+  jellyfin-cache:

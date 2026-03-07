@@ -1,0 +1,29 @@
+services:
+
+  openthread:
+    image: openthread/border-router:latest
+    container_name: openthread
+    restart: always
+    privileged: true
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - ../iot/.env.thread
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - openthread-config:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/net/tun:/dev/net/tun
+
+networks:
+  services:
+    external: true
+
+volumes:
+  openthread-config:
+    external: true
