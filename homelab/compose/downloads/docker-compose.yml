@@ -1,28 +1,53 @@
 services:
 
-  transmission:
-    image: lscr.io/linuxserver/transmission:latest
+  gluetun:
+    image: qmcgaw/gluetun:v3
+    container_name: gluetun
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.transmission.entrypoints=web"
-      - "traefik.http.routers.transmission.rule=Host(`downloads.home.arpa`)"
-      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
-    environment:
-      - "PUID=1000"
-      - "PGID=1000"
-      - "TZ=Europe/Stockholm"
+      - "traefik.http.routers.qbit.entrypoints=web"
+      - "traefik.http.routers.qbit.rule=Host(`downloads.home.arpa`)"
+      - "traefik.http.services.qbit.loadbalancer.server.port=8080"
+      - "traefik.docker.network=gluetun"
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     ports:
-      - 51413:51413
-      - 51413:51413/udp
+      - '6881:6881'
+      - '6881:6881/udp'
     networks:
-      - services
+      - gluetun
+    env_file:
+      - ./.gluetun.env
     volumes:
-      - transmission-config:/config
+      - gluetun-config:/gluetun
+
+  qbit:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbit
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+    network_mode: "service:gluetun"
+    volumes:
+      - qbit-config:/config
+      - /mnt/media/Media:/downloads
 
 networks:
-  services:
+  gluetun:
     external: true
 
 volumes:
-  transmission-config:
+  gluetun-config:
+    external: true
+  qbit-config:
+    external: true

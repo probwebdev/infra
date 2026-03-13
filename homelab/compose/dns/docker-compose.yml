@@ -1,8 +1,8 @@
 services:
 
   pihole:
-    container_name: pihole
     image: pihole/pihole:latest
+    container_name: pihole
     restart: always
     labels:
       - "traefik.enable=true"
@@ -28,3 +28,4 @@ networks:
 
 volumes:
   pihole-config:
+    external: true

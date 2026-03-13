@@ -66,6 +66,10 @@ services:
 
 volumes:
   homeassistant-data:
+    external: true
   matter-data:
+    external: true
   openthread-data:
+    external: true
   sonoff-data:
+    external: true

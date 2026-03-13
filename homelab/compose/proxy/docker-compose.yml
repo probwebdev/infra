@@ -1,7 +1,8 @@
 services:
 
   traefik:
-    image: traefik:3.6
+    image: traefik:v3
+    container_name: traefik
     restart: always
     command:
       - --entrypoints.web.address=:80
@@ -29,10 +30,13 @@ services:
       - "80:80"
     networks:
       - services
+      - gluetun
     volumes:
       - ./dynamic:/etc/traefik/dynamic
       - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
+  gluetun:
+    external: true
   services:
     external: true

@@ -1,0 +1,13 @@
+http:
+  routers:
+    cockpit:
+      rule: "Host(`homelab.home.arpa`)"
+      entryPoints:
+        - web
+      service: cockpit
+
+  services:
+    cockpit:
+      loadBalancer:
+        servers:
+          - url: "http://homelab.home.arpa:9090"

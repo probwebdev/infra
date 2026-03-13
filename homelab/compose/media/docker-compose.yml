@@ -2,6 +2,7 @@ services:
 
   jellyfin:
     image: jellyfin/jellyfin:latest
+    container_name: jellyfin
     restart: unless-stopped
     group_add:
       - '105'
@@ -19,10 +20,10 @@ services:
       - jellyfin-config:/config
       - jellyfin-cache:/cache
       - type: bind
-        source: ~/Videos
+        source: /mnt/media/Media
         target: /media
       - type: bind
-        source: ~/Music
+        source: /mnt/media/Music
         target: /media2
         read_only: true
       # Optional - extra fonts to be used during transcoding with subtitle burn-in
@@ -39,4 +40,6 @@ networks:
 
 volumes:
   jellyfin-config:
+    external: true
   jellyfin-cache:
+    external: true
