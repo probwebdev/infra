@@ -3,11 +3,11 @@ http:
     cockpit:
       rule: "Host(`homelab.home.arpa`)"
       entryPoints:
-        - web
+        - websecure
       service: cockpit
 
   services:
     cockpit:
       loadBalancer:
         servers:
-          - url: "http://homelab.home.arpa:9090"
+          - url: "https://homelab.home.arpa:9090"

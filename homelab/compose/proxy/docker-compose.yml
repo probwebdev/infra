@@ -6,6 +6,7 @@ services:
     restart: always
     command:
       - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
       - --api.dashboard=true
       - --api.insecure=true
       - --api.debug=false
@@ -18,7 +19,6 @@ services:
       - --providers.file.watch=true
     labels:
       - "traefik.enable=true"
-      - "traefik.entrypoints.web.address=:80"
       - "traefik.api.dashboard=true"
       - "traefik.api.insecure=true"
       - "traefik.api.debug=false"
@@ -28,6 +28,7 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - services
       - gluetun
