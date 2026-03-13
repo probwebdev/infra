@@ -1,13 +1,19 @@
 http:
+  serversTransports:
+    cockpitTransport:
+      insecureSkipVerify: true
   routers:
     cockpit:
       rule: "Host(`homelab.home.arpa`)"
       entryPoints:
         - websecure
       service: cockpit
+      tls: {}
 
   services:
     cockpit:
       loadBalancer:
+        serversTransport: "cockpitTransport@file"
+        passHostHeader: true
         servers:
           - url: "https://homelab.home.arpa:9090"
