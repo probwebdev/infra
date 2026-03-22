@@ -3,8 +3,9 @@ http:
     homeassistant:
       rule: "Host(`hub.home.arpa`)"
       entryPoints:
-        - web
+        - websecure
       service: homeassistant
+      tls: {}
 
   services:
     homeassistant:
