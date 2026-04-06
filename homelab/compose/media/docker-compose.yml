@@ -4,6 +4,10 @@ services:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4096mb
     group_add:
       - '105'
     labels:

@@ -4,6 +4,10 @@ services:
     image: traefik:v3
     container_name: traefik
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512mb
     command:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443

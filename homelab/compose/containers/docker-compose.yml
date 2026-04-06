@@ -4,6 +4,10 @@ services:
     image: portainer/agent:latest
     container_name: portainer-agent
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256mb
     networks:
       - agent_network
     environment:
@@ -18,6 +22,10 @@ services:
     container_name: portainer
     command: -H tcp://portainer-agent:9001 --tlsskipverify
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256mb
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=websecure"

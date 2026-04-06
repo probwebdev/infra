@@ -4,6 +4,10 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 4096mb
     privileged: true
     network_mode: host
     extra_hosts:
@@ -21,6 +25,10 @@ services:
     image: ghcr.io/matter-js/python-matter-server:stable
     container_name: matter
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1024mb
     network_mode: host
     security_opt:
       - apparmor=unconfined
@@ -33,6 +41,10 @@ services:
     image: openthread/border-router:latest
     container_name: openthread
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1024mb
     privileged: true
     network_mode: host
     env_file:
@@ -50,6 +62,10 @@ services:
 #    image: ewelink/sonoff-dongle-flasher:latest
 #    container_name: sonoff-dongle-flasher
 #    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 512mb
 #    labels:
 #      - "traefik.enable=true"
 #      - "traefik.http.routers.sonoff.entrypoints=web"

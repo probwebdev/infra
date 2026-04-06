@@ -4,6 +4,10 @@ services:
     image: pihole/pihole:latest
     container_name: pihole
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1024mb
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pihole.entrypoints=websecure"
