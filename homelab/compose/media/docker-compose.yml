@@ -20,6 +20,9 @@ services:
       - 'host.docker.internal:host-gateway'
     networks:
       - services
+    ports:
+      - 8096:8096/tcp
+      - 7359:7359/udp
     volumes:
       - jellyfin-config:/config
       - jellyfin-cache:/cache
