@@ -1,3 +1,14 @@
+http:
+  middlewares:
+    secureHeaders:
+      headers:
+        stsSeconds: 315360000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        sslRedirect: true
 tls:
   certificates:
     - certFile: /certs/home.arpa.crt
