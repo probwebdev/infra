@@ -7,7 +7,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4096mb
+          memory: 2048mb
+        reservations:
+          memory: 512mb
     group_add:
       - '105'
     labels:
