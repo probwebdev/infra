@@ -4,6 +4,7 @@
 
 # Docker Secrets
 homelab/**/secrets
+hetzner/**/secrets
 
 # Config
 **/*.env

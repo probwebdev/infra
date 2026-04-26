@@ -1,0 +1,87 @@
+services:
+
+  immich-server:
+    container_name: immich-server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: 2.0
+          memory: 4096mb
+        reservations:
+          memory: 512mb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.immich-server.entrypoints=websecure"
+      - "traefik.http.routers.immich-server.tls=true"
+      - "traefik.http.routers.immich-server.rule=Host(`photos.home.arpa`)"
+      - "traefik.http.services.immich-server.loadbalancer.server.port=2283"
+    volumes:
+      - /mnt/media/immich:/data
+      - /mnt/media/Photos:/mnt/media/Photos:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - stack.env
+    ports:
+      - '2283:2283'
+    networks:
+      - services
+      - immich
+    devices:
+      - /dev/dri:/dev/dri
+    depends_on:
+      - redis
+      - database
+    restart: always
+
+  immich-machine-learning:
+    container_name: immich-machine-learning
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
+    deploy:
+      resources:
+        limits:
+          cpus: 2.0
+          memory: 4096mb
+        reservations:
+          memory: 512mb
+    networks:
+      - immich
+    volumes:
+      - model-cache:/cache
+    env_file:
+      - stack.env
+    restart: always
+
+  redis:
+    container_name: immich-redis
+    image: docker.io/valkey/valkey:9
+    networks:
+      - immich
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: always
+
+  database:
+    container_name: immich-postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    networks:
+      - immich
+    volumes:
+      - immich-db:/var/lib/postgresql/data
+    shm_size: 128mb
+    restart: always
+
+networks:
+  immich:
+  services:
+    external: true
+
+volumes:
+  model-cache:
+  immich-db:
+    external: true
