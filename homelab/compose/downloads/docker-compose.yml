@@ -24,8 +24,6 @@ services:
       - '6881:6881/udp'
     networks:
       - gluetun
-    env_file:
-      - ./stack.env
     volumes:
       - gluetun-config:/gluetun
 
