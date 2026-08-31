@@ -40,7 +40,7 @@ services:
       - gluetun
     volumes:
       - ./dynamic:/etc/traefik/dynamic:ro
-      - ./secrets/certs:/certs:ro
+      - ./secrets/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
