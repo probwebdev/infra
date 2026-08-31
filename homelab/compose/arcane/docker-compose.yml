@@ -42,6 +42,7 @@ services:
       - "traefik.http.services.arcane-web.loadbalancer.server.scheme=http"
     networks:
       - services
+      - agent_network
     ports:
       - "3552:3552"
     volumes:
@@ -49,6 +50,8 @@ services:
       - arcane-data:/app/data
 
 networks:
+  agent_network:
+    attachable: true
   services:
     external: true
 
