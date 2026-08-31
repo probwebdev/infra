@@ -42,6 +42,8 @@ services:
       - "traefik.http.services.arcane-web.loadbalancer.server.scheme=http"
     networks:
       - services
+    ports:
+      - "3552:3552"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - arcane-data:/app/data
