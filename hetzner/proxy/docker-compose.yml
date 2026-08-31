@@ -36,8 +36,10 @@ services:
       - immich
     volumes:
       - ./dynamic:/etc/traefik/dynamic:ro
-      - ./acme.json:/acme.json
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - type: bind
+        source: ./acme.json
+        target: /acme.json
 
 networks:
   immich:
