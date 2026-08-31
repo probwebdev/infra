@@ -25,7 +25,7 @@ services:
       - --providers.file.directory=/etc/traefik/dynamic
       - --providers.file.watch=true
       - --certificatesresolvers.vercel.acme.email=robert.harbul@gmail.com
-      - --certificatesresolvers.vercel.acme.storage=/acme.json
+      - --certificatesresolvers.vercel.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.vercel.acme.dnsChallenge.provider=vercel
     env_file:
       - .env
@@ -37,9 +37,7 @@ services:
     volumes:
       - ./dynamic:/etc/traefik/dynamic:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - type: bind
-        source: ./acme.json
-        target: /acme.json
+      - ./letsencrypt:/letsencrypt
 
 networks:
   immich:
