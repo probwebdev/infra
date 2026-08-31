@@ -15,8 +15,6 @@ services:
       APP_URL: https://arcane.home.arpa
       TRUSTED_PROXIES: 172.18.0.0/16
       TZ: Europe/Stockholm
-      PUID: 1000
-      PGID: 1000
     healthcheck:
       test: ["CMD", "./arcane", "health", "--timeout", "2s"]
       interval: 10s
