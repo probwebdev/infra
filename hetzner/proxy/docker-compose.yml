@@ -28,7 +28,7 @@ services:
       - --certificatesresolvers.vercel.acme.storage=/acme.json
       - --certificatesresolvers.vercel.acme.dnsChallenge.provider=vercel
     env_file:
-      - stack.env
+      - .env
     ports:
       - "80:80"
       - "443:443"

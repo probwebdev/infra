@@ -1,14 +1,15 @@
-# Edge agent - connects outbound, no exposed ports required
 services:
-  arcane-edge-agent:
+  arcane-agent:
     image: ghcr.io/getarcaneapp/agent:latest
-    container_name: arcane-edge-agent
+    container_name: arcane-agent
     restart: unless-stopped
     environment:
-      - EDGE_AGENT=true
+      - AGENT_MODE=true
       - EDGE_TRANSPORT=poll
       - AGENT_TOKEN=${AGENT_TOKEN}
       - MANAGER_API_URL=${MANAGER_API_URL}
+    ports:
+      - "3553:3553"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - arcane-data:/app/data
