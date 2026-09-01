@@ -1,13 +1,12 @@
 services:
   arcane-agent:
-    image: ghcr.io/getarcaneapp/agent:latest
+    image: ghcr.io/getarcaneapp/agent:v2
     container_name: arcane-agent
     restart: unless-stopped
-    environment:
-      - AGENT_MODE=true
-      - EDGE_TRANSPORT=poll
-      - AGENT_TOKEN=${AGENT_TOKEN}
-      - MANAGER_API_URL=${MANAGER_API_URL}
+    labels:
+      - "com.getarcaneapp.arcane.updater=true"
+    env_file:
+      - .env
     ports:
       - "3553:3553"
     volumes:

@@ -1,7 +1,7 @@
 services:
 
   jellyfin:
-    image: jellyfin/jellyfin:latest
+    image: jellyfin/jellyfin:10
     container_name: jellyfin
     restart: unless-stopped
     deploy:
@@ -13,6 +13,7 @@ services:
     group_add:
       - '105'
     labels:
+      - "com.getarcaneapp.arcane.updater=true"
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.entrypoints=websecure"
       - "traefik.http.routers.jellyfin.tls=true"

@@ -11,6 +11,7 @@ services:
         reservations:
           memory: 512mb
     labels:
+      - "com.getarcaneapp.arcane.updater=true"
       - "traefik.enable=true"
       - "traefik.http.routers.immich-server.entrypoints=websecure"
       - "traefik.http.routers.immich-server.tls=true"
@@ -21,7 +22,7 @@ services:
       - /mnt/media/Photos:/mnt/media/Photos:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - stack.env
+      - .env
     ports:
       - '2283:2283'
     networks:
@@ -44,17 +45,21 @@ services:
           memory: 4096mb
         reservations:
           memory: 512mb
+    labels:
+      - "com.getarcaneapp.arcane.updater=true"
     networks:
       - immich
     volumes:
       - model-cache:/cache
     env_file:
-      - stack.env
+      - .env
     restart: always
 
   redis:
     container_name: immich-redis
     image: docker.io/valkey/valkey:9
+    labels:
+      - "com.getarcaneapp.arcane.updater=false"
     networks:
       - immich
     healthcheck:
@@ -64,6 +69,8 @@ services:
   database:
     container_name: immich-postgres
     image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    labels:
+      - "com.getarcaneapp.arcane.updater=false"
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}

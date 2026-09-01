@@ -8,6 +8,9 @@ services:
       resources:
         limits:
           memory: 512mb
+    environment:
+      PUID: 1000
+      PGID: 1000
     command:
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -26,6 +29,7 @@ services:
       - --providers.file.directory=/etc/traefik/dynamic
       - --providers.file.watch=true
     labels:
+      - "com.getarcaneapp.arcane.updater=true"
       - "traefik.enable=true"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls=true"

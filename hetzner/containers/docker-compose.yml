@@ -1,13 +1,15 @@
 services:
 
   portainer-agent:
-    image: portainer/agent:latest
+    image: portainer/agent:lts
     container_name: portainer-agent
     restart: unless-stopped
     deploy:
       resources:
         limits:
           memory: 256mb
+    labels:
+      - "com.getarcaneapp.arcane.updater=true"
     environment:
       AGENT_CLUSTER_ADDR: tasks.portainer-agent
       AGENT_PORT: 9001

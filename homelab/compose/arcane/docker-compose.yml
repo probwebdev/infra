@@ -1,7 +1,7 @@
 services:
 
   arcane:
-    image: ghcr.io/getarcaneapp/manager:latest
+    image: ghcr.io/getarcaneapp/manager:v2
     container_name: arcane
     restart: unless-stopped
     cgroup: host
@@ -9,12 +9,8 @@ services:
       resources:
         limits:
           memory: 512mb
-    environment:
-      ENCRYPTION_KEY: ${ARCANE_ENCRYPTION_KEY}
-      JWT_SECRET: ${ARCANE_JWT_SECRET}
-      APP_URL: https://arcane.home.arpa
-      TRUSTED_PROXIES: 172.18.0.0/16
-      TZ: Europe/Stockholm
+    env_file:
+      - .env
     healthcheck:
       test: ["CMD", "./arcane", "health", "--timeout", "2s"]
       interval: 10s
@@ -22,6 +18,7 @@ services:
       retries: 5
       start_period: 15s
     labels:
+      - "com.getarcaneapp.arcane.updater=true"
       - "traefik.enable=true"
       - "traefik.docker.network=services"
       - "traefik.http.routers.arcane-grpc.rule=Host(`arcane.home.arpa`) && Path(`/api/tunnel/connect`) && Method(`POST`) && HeaderRegexp(`Content-Type`, `^application/grpc`)"

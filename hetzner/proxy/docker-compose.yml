@@ -8,6 +8,8 @@ services:
       resources:
         limits:
           memory: 256mb
+    labels:
+      - "com.getarcaneapp.arcane.updater=true"
     command:
       - --entrypoints.web.address=:80
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
