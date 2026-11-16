@@ -1,7 +1,7 @@
 services:
 
   arcane:
-    image: ghcr.io/getarcaneapp/manager:v2
+    image: ghcr.io/getarcaneapp/manager:${ARCANE_VERSION:-v3}
     container_name: arcane
     restart: unless-stopped
     cgroup: host

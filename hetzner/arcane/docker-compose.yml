@@ -1,6 +1,6 @@
 services:
   arcane-agent:
-    image: ghcr.io/getarcaneapp/agent:v2
+    image: ghcr.io/getarcaneapp/agent:${ARCANE_VERSION:-v3}
     container_name: arcane-agent
     restart: unless-stopped
     labels:
